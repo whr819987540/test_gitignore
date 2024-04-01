@@ -1,0 +1,52 @@
+# 测试通配符
+# touch a.txt 9.txt 0.txt
+[a-z].txt
+[0-9].txt
+# 都可以忽略
+# git check-ignore -v a.txt 9.txt 0.txt
+# .gitignore:3:[a-z].txt  a.txt
+# .gitignore:4:[0-9].txt  9.txt
+# .gitignore:4:[0-9].txt  0.txt
+
+# mkdir txt
+# touch txt/9.txt
+# txt/9.txt 也被忽略
+# git check-ignore -v txt/9.txt
+# .gitignore:4:[0-9].txt  txt/9.txt
+
+# /可以防止递归处理
+# touch 1.log
+# mkdir log
+# touch log/1.log
+/1.log
+# 1.log 被忽略，log/1.log未被忽略
+# git check-ignore -v 1.log log/1.log
+# .gitignore:21:/1.log    1.log
+
+# 排除忽略某个文件
+# touch 3.txt
+!/3.txt
+# 3.txt未被忽略
+# git check-ignore -v 3.txt
+# .gitignore:28:!/3.txt   3.txt
+
+# 忽略所有的某个名称目录
+# mkdir -p cache cc/cache
+# touch cache/cache
+cache/
+# git check-ignore -v cache cc/cache cache/cache
+# .gitignore:36:cache/    cache
+# .gitignore:36:cache/    cc/cache
+# .gitignore:36:cache/    cache/cache
+
+
+# file file/ 没有区别
+# mkdir -p file ff/file
+# touch file/file
+file
+# git check-ignore -v file ff/file file/file
+# .gitignore:46:file      file
+# .gitignore:46:file      ff/file
+# .gitignore:46:file      file/file
+
+.history
